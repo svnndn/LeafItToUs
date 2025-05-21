@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: LeafItToUs
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    hikari:
+      username: postgres
+      password: password
+      maximum-pool-size: 20
+      jdbc-url: jdbc:postgresql://localhost:5432/postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
