@@ -1,5 +1,6 @@
 package ru.litu.user.service;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import ru.litu.exception.ObjectNotFoundException;
 import ru.litu.exception.SQLConstraintViolationException;
 import jakarta.persistence.EntityManager;
@@ -14,7 +15,7 @@ import org.springframework.data.domain.Sort;
 //import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.litu.user.dto.NewUserDto;
-import ru.litu.user.dto.USerDto;
+import ru.litu.user.dto.UserDto;
 import ru.litu.user.mapper.UserMapper;
 import ru.litu.user.model.Role;
 import ru.litu.user.model.User;
@@ -52,7 +53,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public USerDto get(Long userId) {
+    public UserDto get(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> new ObjectNotFoundException("User with id = " + userId + "doesn't exist."));
         return userMapper.userToUserDto(user);
     }
@@ -82,13 +83,13 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-//    public User findByEmail(String email) throws UsernameNotFoundException {
-//        return userRepository.findByEmail(email).orElseThrow(() -> new ObjectNotFoundException("User with email = " + email + " doesn't exist."));
-//    }
-//
-//    public User loadUserByUsername(String username) throws UsernameNotFoundException {
-//        return userRepository.findByUsername(username).orElseThrow(() -> new ObjectNotFoundException("User with username = " + username + " doesn't exist."));
-//    }
+    public User findByEmail(String email) throws UsernameNotFoundException {
+        return userRepository.findByEmail(email).orElseThrow(() -> new ObjectNotFoundException("User with email = " + email + " doesn't exist."));
+    }
+
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username).orElseThrow(() -> new ObjectNotFoundException("User with username = " + username + " doesn't exist."));
+    }
 
     @Override
     public List<User> getUsersWithIdBiggerThan(Long idMin) {

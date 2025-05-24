@@ -3,7 +3,7 @@ package ru.litu.user.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-//import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Set;
 
@@ -15,7 +15,7 @@ import java.util.Set;
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Role {  // implements GrantedAuthority {
+public class Role implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,8 +27,8 @@ public class Role {  // implements GrantedAuthority {
     @ManyToMany(mappedBy = "user_roles")
     private Set<User> users;
 
-//    @Override
-//    public String getAuthority() {
-//        return getName();
-//    }
+    @Override
+    public String getAuthority() {
+        return getName();
+    }
 }
