@@ -1,13 +1,13 @@
 package ru.litu.user.service;
 
-//import org.springframework.security.core.userdetails.UserDetailsService;
-//import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import ru.litu.user.dto.NewUserDto;
 import ru.litu.user.model.User;
 
 import java.util.List;
 
-public interface UserService { //extends UserDetailsService {
+public interface UserService extends UserDetailsService {
     List<User> getAll();
 
     List<User> getByIds(List<Long> ids, Integer from, Integer size);
@@ -20,5 +20,5 @@ public interface UserService { //extends UserDetailsService {
 
     User add(NewUserDto user);
 
-//    User loadUserByUsername(String username) throws UsernameNotFoundException;
+    User loadUserByUsername(String username) throws UsernameNotFoundException;
 }

@@ -2,6 +2,7 @@ package ru.litu.plant.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.litu.plant.dto.PlantResponse;
@@ -21,14 +22,13 @@ public class PlantController {
         return plantService.getAllPlants();
     }
 
-    @GetMapping("/{name}")
-    public PlantResponse findByName(String name){
+    @GetMapping("/name/{name}")
+    public PlantResponse findByName(@PathVariable String name) {
         return plantService.getPlantByName(name);
     }
 
-    @GetMapping("/{id}")
-    public PlantResponse findById(Long id){
+    @GetMapping("/id/{id}")
+    public PlantResponse findById(@PathVariable Long id) {
         return plantService.getPlantById(id);
     }
-
 }

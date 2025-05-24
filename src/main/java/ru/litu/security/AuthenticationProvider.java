@@ -21,7 +21,7 @@ public class AuthenticationProvider implements org.springframework.security.auth
             UserDetails userDetails = User
                     .withUsername(username)
                     .password("NOT_DISCLOSED")
-//                    .authorities(((ru.litu.user.model.User) user).getRoles()) - todo: убрать когда будут authorities
+                    .authorities(((ru.litu.user.model.User) user).getRoles()) //- todo: убрать когда будут authorities
                     .build();
             return userDetails;
         }

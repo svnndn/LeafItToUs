@@ -5,7 +5,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.factory.Mappers;
 import ru.litu.user.dto.NewUserDto;
-import ru.litu.user.dto.USerDto;
+import ru.litu.user.dto.UserDto;
 import ru.litu.user.model.User;
 
 import java.util.List;
@@ -14,11 +14,14 @@ import java.util.List;
 public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    USerDto userToUserDto(User user);
+    UserDto userToUserDto(User user);
 
-    List<USerDto> listUserToListUserDto(List<User> user);
+    List<UserDto> listUserToListUserDto(List<User> user);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "role", ignore = true)
+    @Mapping(target = "roles", ignore = true)
+    @Mapping(target = "email", ignore = true)
+    @Mapping(target = "name", ignore = true)
+    @Mapping(target = "authorities", ignore = true)
     User newUserRequestDtoToUser(NewUserDto newUserDto);
 }

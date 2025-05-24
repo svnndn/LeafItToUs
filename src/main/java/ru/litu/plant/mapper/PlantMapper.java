@@ -9,7 +9,6 @@ import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface PlantMapper {
-
     PlantResponse toResponse(Plant plant);
 
     List<PlantResponse> toResponseList(List<Plant> plants);
