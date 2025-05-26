@@ -1,6 +1,6 @@
 package ru.litu.forum_service.controller;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/publications")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PublicationController {
 
     private final PublicationService publicationService;

@@ -33,6 +33,6 @@ public class Publication {
     @Column(name = "author_id")
     private Long authorId;
 
-    @OneToMany(mappedBy = "publications", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "publication", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 }
