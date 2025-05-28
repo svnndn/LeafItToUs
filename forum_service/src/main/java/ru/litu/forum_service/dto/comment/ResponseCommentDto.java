@@ -1,4 +1,4 @@
-package ru.litu.forum_service.dto;
+package ru.litu.forum_service.dto.comment;
 
 import lombok.*;
 import ru.litu.forum_service.entity.Publication;
@@ -10,10 +10,9 @@ import java.time.LocalDateTime;
 @ToString
 @Getter
 @Setter
-public class CommentDto {
+public class ResponseCommentDto {
     private Long id;
     private String textContent;
     private LocalDateTime createdOn;
     private Long authorId;
-    private Publication publication;
 }

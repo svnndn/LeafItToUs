@@ -2,10 +2,9 @@ package ru.litu.forum_service.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.litu.forum_service.dto.CommentDto;
+import ru.litu.forum_service.dto.comment.RequestCommentDto;
+import ru.litu.forum_service.dto.comment.ResponseCommentDto;
 import ru.litu.forum_service.entity.Comment;
 import ru.litu.forum_service.entity.Publication;
 import ru.litu.forum_service.mapper.CommentMapper;
@@ -24,19 +23,25 @@ public class CommentService {
     private final PublicationRepository publicationRepository;
     private final CommentMapper commentMapper;
 
-    public CommentDto create(CommentDto dto) {
-        Publication publication = publicationRepository.findById(dto.getPublication().getId())
+    public ResponseCommentDto create(RequestCommentDto dto, Long publicationId) {
+
+        System.out.println(dto);
+
+        Publication publication = publicationRepository.findById(publicationId)
                 .orElseThrow(() -> new EntityNotFoundException("Publication not found"));
 
         Comment entity = commentMapper.toEntity(dto);
         entity.setCreatedOn(LocalDateTime.now());
+
+        System.out.println(entity);
+
         entity.setPublication(publication);
 
         Comment saved = commentRepository.save(entity);
         return commentMapper.toDto(saved);
     }
 
-    public List<CommentDto> getAllByPublicationId(Long publicationId) {
+    public List<ResponseCommentDto> getAllByPublicationId(Long publicationId) {
         return commentRepository.findAllByPublicationId(publicationId).stream()
                 .map(commentMapper::toDto)
                 .toList();

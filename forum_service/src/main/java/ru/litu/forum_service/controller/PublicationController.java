@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.litu.forum_service.dto.PublicationDto;
+import ru.litu.forum_service.dto.publication.RequestPublicationDto;
+import ru.litu.forum_service.dto.publication.ResponsePublicationDto;
 import ru.litu.forum_service.service.PublicationService;
 
 import java.nio.file.AccessDeniedException;
@@ -18,12 +19,12 @@ public class PublicationController {
     private final PublicationService publicationService;
 
     @PostMapping
-    public ResponseEntity<PublicationDto> create(@RequestBody PublicationDto dto) {
+    public ResponseEntity<ResponsePublicationDto> create(@RequestBody RequestPublicationDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(publicationService.create(dto));
     }
 
     @GetMapping
-    public ResponseEntity<List<PublicationDto>> getAll() {
+    public ResponseEntity<List<ResponsePublicationDto>> getAll() {
         return ResponseEntity.ok(publicationService.findAll());
     }
 

@@ -1,4 +1,4 @@
-package ru.litu.forum_service.dto;
+package ru.litu.forum_service.dto.publication;
 
 import lombok.*;
 
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @ToString
 @Getter
 @Setter
-public class PublicationDto {
+public class ResponsePublicationDto {
     private Long id;
     private String textContent;
     private LocalDateTime createdOn;
