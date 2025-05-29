@@ -13,6 +13,7 @@ import ru.litu.forum_service.repository.PublicationRepository;
 
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -43,6 +44,8 @@ public class CommentService {
 
     public List<ResponseCommentDto> getAllByPublicationId(Long publicationId) {
         return commentRepository.findAllByPublicationId(publicationId).stream()
+                .filter(comment -> comment.getCreatedOn() != null)
+                .sorted(Comparator.comparing(Comment::getCreatedOn).reversed())
                 .map(commentMapper::toDto)
                 .toList();
     }

@@ -10,7 +10,9 @@ import ru.litu.forum_service.mapper.PublicationMapper;
 import ru.litu.forum_service.repository.PublicationRepository;
 
 import java.nio.file.AccessDeniedException;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -35,9 +37,22 @@ public class PublicationService {
     }
 
     public List<ResponsePublicationDto> findAll() {
-        List<Publication> publications = publicationRepository.findAll();
+        List<Publication> publications = publicationRepository.findAll().stream()
+                .sorted(Comparator.comparing(Publication::getCreatedOn).reversed())
+                .toList();;
         return publicationMapper.toDtoList(publications);
     }
+
+    public List<ResponsePublicationDto> getPublicationsSince(Duration duration) {
+        LocalDateTime since = LocalDateTime.now().minus(duration);
+        List<Publication> publications = publicationRepository.findByCreatedOnAfter(since);
+        return publicationMapper.toDtoList(
+                publications.stream()
+                        .sorted(Comparator.comparing(Publication::getCreatedOn).reversed())
+                        .toList()
+        );
+    }
+
 
     public void deleteById(Long id, Long requesterId) throws AccessDeniedException {
         Publication pub = publicationRepository.findById(id)

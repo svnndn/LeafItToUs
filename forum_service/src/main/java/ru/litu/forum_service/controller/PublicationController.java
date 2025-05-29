@@ -9,6 +9,7 @@ import ru.litu.forum_service.dto.publication.ResponsePublicationDto;
 import ru.litu.forum_service.service.PublicationService;
 
 import java.nio.file.AccessDeniedException;
+import java.time.Duration;
 import java.util.List;
 
 @RestController
@@ -23,9 +24,29 @@ public class PublicationController {
         return ResponseEntity.status(HttpStatus.CREATED).body(publicationService.create(dto));
     }
 
-    @GetMapping
+    @GetMapping("/all-time")
     public ResponseEntity<List<ResponsePublicationDto>> getAll() {
         return ResponseEntity.ok(publicationService.findAll());
+    }
+
+    @GetMapping("/last-day")
+    public ResponseEntity<List<ResponsePublicationDto>> getPublicationsLastDay() {
+        return ResponseEntity.ok(publicationService.getPublicationsSince(Duration.ofDays(1)));
+    }
+
+    @GetMapping("/last-week")
+    public ResponseEntity<List<ResponsePublicationDto>> getPublicationsLastWeek() {
+        return ResponseEntity.ok(publicationService.getPublicationsSince(Duration.ofDays(7)));
+    }
+
+    @GetMapping("/last-month")
+    public ResponseEntity<List<ResponsePublicationDto>> getPublicationsLastMonth() {
+        return ResponseEntity.ok(publicationService.getPublicationsSince(Duration.ofDays(30)));
+    }
+
+    @GetMapping("/last-year")
+    public ResponseEntity<List<ResponsePublicationDto>> getPublicationsLastYear() {
+        return ResponseEntity.ok(publicationService.getPublicationsSince(Duration.ofDays(365)));
     }
 
     @DeleteMapping("/{id}")

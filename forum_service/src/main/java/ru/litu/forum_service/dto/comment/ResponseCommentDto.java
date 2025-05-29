@@ -1,7 +1,6 @@
 package ru.litu.forum_service.dto.comment;
 
 import lombok.*;
-import ru.litu.forum_service.entity.Publication;
 
 import java.time.LocalDateTime;
 
