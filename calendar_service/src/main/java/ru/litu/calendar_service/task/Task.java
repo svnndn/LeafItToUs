@@ -3,6 +3,8 @@ package ru.litu.calendar_service.task;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Data
 @Table(name = "task")
@@ -21,7 +23,7 @@ public class Task {
     private String name;
 
     @Column(name = "date")
-    private int date;
+    private LocalDateTime date;
 
     @Column(name = "description")
     private String description;
@@ -32,7 +34,7 @@ public class Task {
     @Column(name = "user_id")
     private long userId;
 
-    public Task(String name, int date, String description, boolean isComplete, long userId) {
+    public Task(String name, LocalDateTime date, String description, boolean isComplete, long userId) {
         this.name = name;
         this.date = date;
         this.description = description;

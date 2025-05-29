@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import ru.litu.calendar_service.task.Task;
 import ru.litu.calendar_service.task.TaskRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -22,9 +23,9 @@ public class TaskService {
         taskRepository.save(task);
     }
 
-    public List<Task> findByDateAndUserId(int date, long userId) {
+    public List<Task> findByDateAndUserId(long userId, LocalDateTime startDate, LocalDateTime endDate) {
         // in testing, date=20220228, calendar=1
-        return taskRepository.findByDateAndUserId(date, userId);
+        return taskRepository.findByUserIdAndDateBetween(userId, startDate, endDate);
     }
 
     public Task getTask(long id) {

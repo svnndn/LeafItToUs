@@ -17,4 +17,6 @@ spring:
     hibernate:
       ddl-auto: update
       dialect: org.hibernate.dialect.PostgreSQLDialect
+      jdbc:
+        time_zone: UTCv
     show-sql: true

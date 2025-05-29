@@ -15,9 +15,9 @@
 <body>
 <div id="nav">
     <ul style="padding-left: 30px; margin-top: 0;">
-        <li class="nav-element" style="float: left; padding-left: 0px;">
-            <img th:src="@{/img/logo.jpg}" alt="" style="height: 80px; width: 80px;">
-        </li>
+<!--        <li class="nav-element" style="float: left; padding-left: 0px;">-->
+<!--            <img th:src="@{/img/img.png}" alt="" style="height: 80px; width: 80px;">-->
+<!--        </li>-->
         <li class="nav-element nav-li">
             <a class="nav-text" href="/">Home</a>
         </li>
@@ -50,13 +50,39 @@
 </div>
 
 <div id="newEventModal">
-    <form id="addTaskForm" th:action="@{/calendar/addTask}" method="post">
+    <form id="addTaskForm" th:action="@{'/calendar/addTask/' + ${userId}}" method="post">
         <h2>New Task</h2>
         <input class="inputs" id="eventTitleInput" name="name" required placeholder="Title">
         <textarea class="inputs" name="description" id="eventDescriptionInput" rows="8" cols="60"></textarea>
+
+        <div class="form-group">
+            <label for="hours">Hours:</label>
+            <select id="hours" name="hours">
+                <option value="">-- Select hour --</option>
+                <!-- Генерируем часы от 1 до 24 -->
+                <script>
+                    for (let i = 1; i <= 24; i++) {
+                        document.write(`<option value="${i}">${i}</option>`);
+                    }
+                </script>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="minutes">Minutes:</label>
+            <select id="minutes" name="minutes">
+                <option value="">-- Select minute --</option>
+                <option value="0">00</option>
+                <option value="15">15</option>
+                <option value="30">30</option>
+                <option value="45">45</option>
+            </select>
+        </div>
+
         <select class="inputs" id="eventTypeInput" name="type">
-            <option value="revision">revision</option>
-            <option value="assessment">assessment</option>
+            <option value="forOneDay">for one day</option>
+            <option value="forMonth">for month</option>
+            <option value="forWeek">for week</option>
         </select>
 
         <button type="submit" id="saveButton">Save</button>
@@ -96,6 +122,7 @@
 <script th:src="@{/js/calendar.js}" th:inline="javascript"></script>
 <!-- <script th:src="@{/js/ajaxGetTasks.js}" th:inline="javascript"></script> -->
 <script type="text/javascript" th:inline="javascript">
+    var userId = document.getElementById('userId').value;
     function displayDetail(taskId) {
 
         ajaxTaskDetailEventListener(taskId);
@@ -134,7 +161,7 @@
                         //     $("#taskDetailType").val("assessment").change();
                         // }
 
-                        document.getElementById("taskDetailForm").setAttribute("action", "/calendar/edit/"+task.id);
+                        document.getElementById("taskDetailForm").setAttribute("action", "/calendar/edit/"+task.id+"/"+userId);
 
                         const taskDetailModal = document.getElementById("taskDetailModal");
                         taskDetailModal.style.display = "block";
@@ -168,7 +195,7 @@
         function ajaxGetTask(date) {
             $.ajax({
                 type : "GET",
-                url : "/calendar/" + date,
+                url : "/calendar/" + date + "/" + userId,
                 success : function(result) {
                     if (result.status == "success") {
 
@@ -225,7 +252,7 @@
 
             var deleteAnchor = document.createElement("a");
             deleteAnchor.setAttribute("class", "task-edit-anchor");
-            deleteAnchor.setAttribute("href", "/calendar/delete/"+task.id);
+            deleteAnchor.setAttribute("href", "/calendar/delete/"+task.id+"/"+userId);
             deleteAnchor.innerHTML = "Delete";
             taskEditDiv.appendChild(deleteAnchor);
 
@@ -237,7 +264,7 @@
 
             var completeAnchor = document.createElement("a");
             completeAnchor.setAttribute("class", "task-edit-anchor");
-            completeAnchor.setAttribute("href", "/calendar/complete/"+task.id+"/"+isComplete);
+            completeAnchor.setAttribute("href", "/calendar/complete/"+task.id+"/"+isComplete+"/"+userId);
             completeAnchor.innerHTML = "Complete";
             taskEditDiv.appendChild(completeAnchor);
 
