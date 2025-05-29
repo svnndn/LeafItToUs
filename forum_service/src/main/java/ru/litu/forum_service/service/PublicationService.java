@@ -39,7 +39,7 @@ public class PublicationService {
     public List<ResponsePublicationDto> findAll() {
         List<Publication> publications = publicationRepository.findAll().stream()
                 .sorted(Comparator.comparing(Publication::getCreatedOn).reversed())
-                .toList();;
+                .toList();
         return publicationMapper.toDtoList(publications);
     }
 
