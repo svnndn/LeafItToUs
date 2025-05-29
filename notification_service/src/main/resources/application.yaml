@@ -15,4 +15,4 @@ telegram:
   bot:
     token: 8145814041:AAE-_DJ9tRZ14ni-WlRjCJ0UP1tbNPLZmLE
     username: LeafItToUs_bot
-    api-url: https://api.telegram.org/bot${telegram.bot.token}/sendMessage
+    api-url: https://api.telegram.org

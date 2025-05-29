@@ -1,4 +1,4 @@
-package ru.litu.notification_service.model;
+package ru.litu.notification_service.telegram.model;
 
 import jakarta.persistence.*;
 import lombok.*;

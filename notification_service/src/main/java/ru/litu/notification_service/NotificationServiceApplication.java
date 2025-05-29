@@ -5,16 +5,19 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import ru.litu.notification_service.config.TelegramBotProperties;
-import ru.litu.notification_service.repository.TelegramUserRepository;
-import ru.litu.notification_service.telegramLongPolling.MyTelegramBot;
+import ru.litu.notification_service.telegram.config.TelegramBotProperties;
+import ru.litu.notification_service.telegram.repository.TelegramUserRepository;
+import ru.litu.notification_service.telegram.telegramLongPolling.MyTelegramBot;
 
 @SpringBootApplication
-@EntityScan("ru.litu.notification_service.model")
+@EntityScan(basePackages = {"ru.litu.notification_service.telegram.model",
+        "ru.litu.notification_service.sheduler"})
 @EnableConfigurationProperties(TelegramBotProperties.class)
+@EnableScheduling
 public class NotificationServiceApplication {
 
     public static void main(String[] args) {

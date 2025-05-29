@@ -1,9 +1,9 @@
-package ru.litu.notification_service.controller;
+package ru.litu.notification_service.telegram.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.litu.notification_service.service.TelegramService;
+import ru.litu.notification_service.telegram.service.TelegramService;
 
 @RestController
 @RequestMapping("/api/telegram")

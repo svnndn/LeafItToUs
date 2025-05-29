@@ -1,4 +1,4 @@
-package ru.litu.notification_service.config;
+package ru.litu.notification_service.telegram.config;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

@@ -1,7 +1,7 @@
-package ru.litu.notification_service.repository;
+package ru.litu.notification_service.telegram.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.litu.notification_service.model.TelegramUser;
+import ru.litu.notification_service.telegram.model.TelegramUser;
 
 import java.util.Optional;
 

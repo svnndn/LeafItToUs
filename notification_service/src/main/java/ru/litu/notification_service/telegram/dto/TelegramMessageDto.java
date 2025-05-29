@@ -1,4 +1,4 @@
-package ru.litu.notification_service.dto;
+package ru.litu.notification_service.telegram.dto;
 
 import lombok.*;
 

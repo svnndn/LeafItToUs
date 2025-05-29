@@ -1,10 +1,10 @@
-package ru.litu.notification_service.service;
+package ru.litu.notification_service.telegram.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.ResponseEntity;
-import ru.litu.notification_service.config.TelegramBotProperties;
+import ru.litu.notification_service.telegram.config.TelegramBotProperties;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +17,7 @@ public class TelegramService {
                 properties.getApiUrl(),
                 properties.getToken(),
                 chatId,
-                text.replace(" ", "%20")); // Кодируем пробелы
+                text);
 
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);

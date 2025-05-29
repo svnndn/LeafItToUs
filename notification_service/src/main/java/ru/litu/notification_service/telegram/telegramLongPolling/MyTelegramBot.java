@@ -1,13 +1,13 @@
-package ru.litu.notification_service.telegramLongPolling;
+package ru.litu.notification_service.telegram.telegramLongPolling;
 
 import lombok.RequiredArgsConstructor;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.litu.notification_service.config.TelegramBotProperties;
-import ru.litu.notification_service.model.TelegramUser;
-import ru.litu.notification_service.repository.TelegramUserRepository;
+import ru.litu.notification_service.telegram.config.TelegramBotProperties;
+import ru.litu.notification_service.telegram.model.TelegramUser;
+import ru.litu.notification_service.telegram.repository.TelegramUserRepository;
 
 @RequiredArgsConstructor
 public class MyTelegramBot extends TelegramLongPollingBot {
