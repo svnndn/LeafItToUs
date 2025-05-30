@@ -2,10 +2,13 @@ package ru.litu.main_service.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class JwtTokenProvider {
@@ -40,4 +43,17 @@ public class JwtTokenProvider {
     public String getUsername(String token) {
         return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().getSubject();
     }
+
+    public String getRole(String token) {
+        return (String) Jwts.parser()
+                .setSigningKey(secretKey)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("role");
+    }
+
+    public List<GrantedAuthority> getAuthorities(String role) {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role));
+    }
+
 }
