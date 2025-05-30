@@ -18,6 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class WebSecurityConfig {
     private final AuthenticationProvider authenticationProvider;
+    private final JwtAuthenticationSuccessHandler jwtAuthenticationSuccessHandler;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -33,7 +34,7 @@ public class WebSecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/sign-in")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/swagger-ui/index.html", true)
+                        .successHandler(jwtAuthenticationSuccessHandler)
                         .permitAll()
                 )
                 .logout(logout -> logout
