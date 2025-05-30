@@ -11,6 +11,9 @@ import java.util.List;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface UserMapper {
+    @Mapping(source = "id", target = "id")
+    @Mapping(source = "email", target = "email")
+    @Mapping(source = "name", target = "name")
     UserDto userToUserDto(User user);
 
     List<UserDto> listUserToListUserDto(List<User> user);
