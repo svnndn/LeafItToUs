@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 public class UserLoginDto {
 
     @NotNull
-    @Size(min = 5)
     private String username;
 
     @NotNull
