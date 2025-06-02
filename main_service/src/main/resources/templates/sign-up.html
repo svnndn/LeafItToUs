@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #f0fff4;
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .register-container {
+            background-color: #ffffff;
+            padding: 40px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 128, 0, 0.2);
+            width: 350px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #2f855a;
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #c6f6d5;
+            border-radius: 5px;
+            box-sizing: border-box;
+            margin-top: 5px;
+        }
+
+        button {
+            background-color: #38a169;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #2f855a;
+        }
+
+        p {
+            margin-top: 20px;
+        }
+
+        a {
+            color: #38a169;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="register-container">
+    <h1>Регистрация</h1>
+    <form method="post" th:action="@{/sign-up}">
+        <label>
+            Имя:
+            <input type="text" name="name" placeholder="Имя" required />
+        </label>
+        <label>
+            Логин:
+            <input type="text" name="username" placeholder="Логин" required />
+        </label>
+        <label>
+            Email:
+            <input type="email" name="email" placeholder="Email" required />
+        </label>
+        <label>
+            Пароль:
+            <input type="password" name="password" placeholder="Пароль" required />
+        </label>
+        <label>
+            Подтвердите пароль:
+            <input type="password" name="passwordConfirm" placeholder="Подтвердите пароль" required />
+        </label>
+        <button type="submit">Зарегистрироваться</button>
+    </form>
+
+    <p>Уже есть аккаунт? <a th:href="@{/sign-in}">Войти</a></p>
+</div>
+</body>
+</html>

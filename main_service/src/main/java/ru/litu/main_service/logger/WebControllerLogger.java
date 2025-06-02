@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class WebControllerLogger {
 
-    @Pointcut("within(ru.litu.web..*)")
+    @Pointcut("within(ru.litu.main_service.web..*)")
     public void serviceMethod() { }
 
     @Before("serviceMethod()")
@@ -27,6 +27,7 @@ public class WebControllerLogger {
         String methodName = joinPoint.getSignature().getName();
         String className = joinPoint.getSignature().getDeclaringTypeName();
         Object[] methodArgs = joinPoint.getArgs();
+
         log.info("");
         log.info("-------------------------------------------------------------------------");
         log.info("");
@@ -35,10 +36,15 @@ public class WebControllerLogger {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        Set<String> roles = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority).collect(Collectors.toSet());
-
-        log.info("Current user roles: " + roles);
+        if (authentication != null && authentication.isAuthenticated()) {
+            Set<String> roles = authentication.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .collect(Collectors.toSet());
+            log.info("Current user roles: " + roles);
+        } else {
+            log.info("Current user is not authenticated");
+        }
     }
+
 
 }

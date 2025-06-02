@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    #url: jdbc:postgresql://localhost:5432/postgres
+    url: ${DATASOURCE_URL}
+    username: postgres
+    password: password
+    hikari:
+      maximum-pool-size: 20
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+
+telegram:
+  bot:
+    token: 8145814041:AAE-_DJ9tRZ14ni-WlRjCJ0UP1tbNPLZmLE
+    username: LeafItToUs_bot
+    api-url: https://api.telegram.org
+
+server:
+  port: 8082
