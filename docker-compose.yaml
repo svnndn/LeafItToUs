@@ -1,14 +1,130 @@
 version: "3.9"
 
 services:
-  postgres:
+  postgres-main:
     image: postgres:16.3
     restart: always
     environment:
-      POSTGRES_DB: postgres
+      POSTGRES_DB: postgres-main
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     volumes:
-      - ./postgresql:/var/lib/postgresql/data
+      - ./postgresql/1:/var/lib/postgresql/data
     ports:
       - 5432:5432
+    networks:
+      - localnet
+
+  postgres-notification:
+    image: postgres:16.3
+    restart: always
+    environment:
+      POSTGRES_DB: postgres-notification
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./postgresql/2:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
+    networks:
+      - localnet
+
+  postgres-calendar:
+    image: postgres:16.3
+    restart: always
+    environment:
+      POSTGRES_DB: postgres-calendar
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./postgresql/3:/var/lib/postgresql/data
+    ports:
+      - 5434:5432
+    networks:
+      - localnet
+
+  postgres-forum:
+    image: postgres:16.3
+    restart: always
+    environment:
+      POSTGRES_DB: postgres-forum
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./postgresql/4:/var/lib/postgresql/data
+    ports:
+      - 5435:5432
+    networks:
+      - localnet
+
+  main-service:
+    image: main-service
+    build:
+      context: ./main_service
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      - DATASOURCE_URL=jdbc:postgresql://postgres-main:5432/postgres-main
+      - DATASOURCE_USERNAME=postgres
+      - DATASOURCE_PASSWORD=password
+    depends_on:
+      - postgres-main
+    networks:
+      - localnet
+
+  notification-service:
+    image: notification-service
+    build:
+      context: ./notification_service
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8082:8082
+    environment:
+      - DATASOURCE_URL=jdbc:postgresql://postgres-notification:5432/postgres-notification
+      - DATASOURCE_USERNAME=postgres
+      - DATASOURCE_PASSWORD=password
+    depends_on:
+      - postgres-notification
+    networks:
+      - localnet
+
+  calendar-service:
+    image: calendar-service
+    build:
+      context: ./calendar_service
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8083:8083
+    environment:
+      - DATASOURCE_URL=jdbc:postgresql://postgres-calendar:5432/postgres-calendar
+      - DATASOURCE_USERNAME=postgres
+      - DATASOURCE_PASSWORD=password
+    depends_on:
+      - postgres-calendar
+    networks:
+      - localnet
+
+  forum-service:
+    image: forum-service
+    build:
+      context: ./forum_service
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8084:8084
+    environment:
+      - DATASOURCE_URL=jdbc:postgresql://postgres-forum:5432/postgres-forum
+      - DATASOURCE_USERNAME=postgres
+      - DATASOURCE_PASSWORD=password
+    depends_on:
+      - postgres-forum
+    networks:
+      - localnet
+
+networks:
+  localnet:
+    driver: bridge

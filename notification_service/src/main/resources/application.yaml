@@ -1,6 +1,7 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    #url: jdbc:postgresql://localhost:5432/postgres
+    url: ${DATASOURCE_URL}
     username: postgres
     password: password
     hikari:
@@ -16,3 +17,6 @@ telegram:
     token: 8145814041:AAE-_DJ9tRZ14ni-WlRjCJ0UP1tbNPLZmLE
     username: LeafItToUs_bot
     api-url: https://api.telegram.org
+
+server:
+  port: 8082

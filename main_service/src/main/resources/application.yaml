@@ -3,7 +3,8 @@ spring:
     name: main_service
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    #url: jdbc:postgresql://localhost:5432/postgres
+    url: ${DATASOURCE_URL}
     username: postgres
     password: password
     hikari:
@@ -21,3 +22,7 @@ spring:
     mode: HTML
     encoding: UTF-8
     cache: false
+
+server:
+  port:
+    8081
