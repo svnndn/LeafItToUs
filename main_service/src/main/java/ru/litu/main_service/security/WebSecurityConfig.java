@@ -33,6 +33,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/admin/").hasRole("ADMIN")
                         .requestMatchers("/", "/sign-up", "/sign-in", "/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/sign-up", "/login").permitAll()
+                        .requestMatchers("/users/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
