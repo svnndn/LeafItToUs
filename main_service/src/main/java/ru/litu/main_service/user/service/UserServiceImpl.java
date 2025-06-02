@@ -1,5 +1,6 @@
 package ru.litu.main_service.user.service;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import jakarta.persistence.EntityManager;
@@ -27,6 +28,7 @@ import ru.litu.main_service.user.repository.UserRepository;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,6 +41,12 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
+
+    @PostConstruct
+    public void init() {
+        roleRepository.save(new Role(null, "ROLE_USER", Set.of()));
+        roleRepository.save(new Role(null, "ROLE_ADMIN", Set.of()));
+    }
 
     @Override
     public User addAdminUser(User user) throws SQLConstraintViolationException {
