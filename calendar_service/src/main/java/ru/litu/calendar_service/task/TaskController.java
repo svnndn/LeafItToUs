@@ -120,6 +120,20 @@ public class TaskController {
         return "redirect:/calendar/" + userId;
     }
 
+    @GetMapping("/actual")
+    public ResponseEntity<Object> getAllActualTasks() {
+        List<Task> taskList = taskService.findAllActualTasks();
+
+        ArrayList<Integer> isCompleteList = new ArrayList<>();
+        for (Task t : taskList) {
+            isCompleteList.add(t.isComplete() ? 1 : 0);
+        }
+
+        return ResponseEntity.ok(
+                new ServiceResponseDto<>("success", taskList, isCompleteList)
+        );
+    }
+
     private LocalDateTime processDate(String inputDate, String time) {
         // input is in format of 2 3 2022: for 2nd March 2022
         String[] splitted = inputDate.split(" ");

@@ -50,6 +50,10 @@ public class TaskService {
         this.save(task);
     }
 
+    public List<Task> findAllActualTasks(){
+        return taskRepository.findActualTasks();
+    }
+
     public void deleteTasksByName(String name) {
         taskRepository.deleteTasksByName(name);
     }
