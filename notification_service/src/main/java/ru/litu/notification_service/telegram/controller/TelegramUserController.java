@@ -15,7 +15,6 @@ public class TelegramUserController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestParam Long userId, @RequestParam String chatId) {
-        // Проверим, существует ли пользователь
         if (telegramUserRepository.findByUserId(userId).isPresent()) {
             return ResponseEntity.badRequest().body("Пользователь с таким userId уже зарегистрирован.");
         }

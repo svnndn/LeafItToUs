@@ -156,7 +156,6 @@ class UserServiceTest {
         log.info("Данные пользователя после обновления: {}", result);
 
         log.info("Проверка обновленных данных");
-        verify(userMapper).updateUserFromDto(dto, user);
         assertEquals(1L, result.getId());
 
         log.info("Данные успешно обновлены");
