@@ -134,7 +134,8 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ObjectNotFoundException("User with id = " + id + " doesn't exist."));
 
-        userMapper.updateUserFromDto(dto, user);
+        user.setEmail(dto.getEmail());
+        user.setName(dto.getName());
         return userRepository.save(user);
     }
 
