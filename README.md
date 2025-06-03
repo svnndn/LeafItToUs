@@ -3,7 +3,9 @@
 ## Навигация
 - [Описание](#описание)
 - [Для запуска](#запуск-проекта)
-- [Документ Requirements](#документ-requirements)
+- [Документ Requirements](#документация-requirements)
+- [Project Vision](#vision-проекта)
+- [Диаграмма Ганта](#диаграмма-ганта)
 
 # Описание
 _**Leaf It To Us**_ — ваш личный помощник в уходе за растениями.
@@ -43,3 +45,12 @@ docker compose up --build
 Убедитесь, что порты `8081–8084` свободны перед запуском.
 
 ---
+
+# Документация Requirements
+**_[Требования к проекту](https://drive.google.com/file/d/1q0EUrCZE2bVmtDb3HspLlktyVKnJmlCS/view?usp=sharing)_**
+
+# Vision проекта
+**_[Смотреть презентацию на google drive](https://drive.google.com/file/d/1vJWRgbw3b7619bWIZqo-3DmDJNAY4QA6/view?usp=sharing)_**
+
+# Диаграмма Ганта
+**_[План проекта со сроками](https://drive.google.com/file/d/1xyeatSnXmyYBCksFAfB9yBpHes_nZ0li/view?usp=sharing)_**
