@@ -125,14 +125,17 @@ class UserControllerIntegrationTest {
         log.info("Запуск теста: обновление пользователя с JWT");
         String token = obtainJwtToken();
 
-        String updateJson = """
-        {
-          "name": "Updated User",
-          "email": "update@email.com"
-        }
-        """;
+        User user = userRepository.findByUsername("testuser").orElseThrow();
+        Long userId = user.getId();
 
-        mockMvc.perform(patch("/users/1")
+        String updateJson = """
+    {
+      "name": "Updated User",
+      "email": "update@email.com"
+    }
+    """;
+
+        mockMvc.perform(patch("/users/" + userId)
                         .header("Authorization", token)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updateJson))
@@ -142,6 +145,7 @@ class UserControllerIntegrationTest {
 
         log.info("Тест успешно пройден: обновление пользователя с JWT");
     }
+
 
     @Test
     @DisplayName("DELETE /users/{id} с JWT — удаление пользователя")
