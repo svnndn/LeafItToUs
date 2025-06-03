@@ -49,11 +49,15 @@ class PublicationServiceTest {
         Publication saved = new Publication(1L, "Test text", LocalDateTime.now(), 1L, List.of());
         ResponsePublicationDto response = new ResponsePublicationDto(1L, "Test text", saved.getCreatedOn(), 1L);
 
+        log.info("Создаём публикацию с текстом='{}' и authorId={}", dto.getTextContent(), dto.getAuthorId());
+
         when(publicationMapper.toEntity(dto)).thenReturn(entity);
         when(publicationRepository.save(any(Publication.class))).thenReturn(saved);
         when(publicationMapper.toDto(saved)).thenReturn(response);
 
         ResponsePublicationDto result = publicationService.create(dto);
+
+        log.info("Публикация сохранена с id={}, текст='{}'", result.getId(), result.getTextContent());
 
         assertNotNull(result);
         assertEquals(saved.getId(), result.getId());
@@ -67,10 +71,13 @@ class PublicationServiceTest {
         Publication p1 = new Publication(1L, "text1", LocalDateTime.now().minusHours(2), 1L, List.of());
         Publication p2 = new Publication(2L, "text2", LocalDateTime.now(), 2L, List.of());
 
+        log.info("Мокаем findAll публикаций: {} и {}", p1.getId(), p2.getId());
+
         when(publicationRepository.findAll()).thenReturn(List.of(p1, p2));
         when(publicationMapper.toDtoList(anyList()))
                 .thenAnswer(invocation -> {
                     List<Publication> pubs = invocation.getArgument(0);
+                    log.info("Конвертация {} публикаций в DTO", pubs.size());
                     return pubs.stream()
                             .map(p -> new ResponsePublicationDto(p.getId(), p.getTextContent(), p.getCreatedOn(), p.getAuthorId()))
                             .toList();
@@ -78,8 +85,10 @@ class PublicationServiceTest {
 
         List<ResponsePublicationDto> result = publicationService.findAll();
 
+        log.info("Получено публикаций: {}", result.size());
         assertEquals(2, result.size());
-        assertTrue(result.get(0).getCreatedOn().isAfter(result.get(1).getCreatedOn()));
+        assertTrue(result.get(0).getCreatedOn().isAfter(result.get(1).getCreatedOn()),
+                "Публикации не отсортированы по убыванию даты");
     }
 
     @Test
@@ -88,10 +97,13 @@ class PublicationServiceTest {
         LocalDateTime now = LocalDateTime.now();
         Publication recent = new Publication(1L, "Recent post", now.minusMinutes(30), 1L, List.of());
 
+        log.info("Тестируем получение публикаций за последние 1 час");
+
         when(publicationRepository.findByCreatedOnAfter(any(LocalDateTime.class))).thenReturn(List.of(recent));
         when(publicationMapper.toDtoList(anyList()))
                 .thenAnswer(invocation -> {
                     List<Publication> pubs = invocation.getArgument(0);
+                    log.info("Конвертация {} публикаций в DTO", pubs.size());
                     return pubs.stream()
                             .map(p -> new ResponsePublicationDto(p.getId(), p.getTextContent(), p.getCreatedOn(), p.getAuthorId()))
                             .toList();
@@ -99,35 +111,48 @@ class PublicationServiceTest {
 
         List<ResponsePublicationDto> result = publicationService.getPublicationsSince(Duration.ofHours(1));
 
+        log.info("Получено публикаций: {}", result.size());
         assertEquals(1, result.size());
-        assertTrue(result.get(0).getCreatedOn().isAfter(now.minusHours(1)));
+        assertTrue(result.get(0).getCreatedOn().isAfter(now.minusHours(1)), "Публикация старше запрошенного периода");
     }
 
     @Test
     @DisplayName("deleteById: должен удалить публикацию, если автор совпадает")
     void deleteById_ShouldDeleteIfAuthorMatches() throws AccessDeniedException {
         Publication pub = new Publication(1L, "text", LocalDateTime.now(), 42L, List.of());
+
+        log.info("Тест удаления публикации id={} авторId={}", pub.getId(), pub.getAuthorId());
         when(publicationRepository.findById(1L)).thenReturn(Optional.of(pub));
 
         publicationService.deleteById(1L, 42L);
 
         verify(publicationRepository).delete(pub);
+        log.info("Публикация id={} успешно удалена", pub.getId());
     }
 
     @Test
     @DisplayName("deleteById: должен выбросить AccessDeniedException при несовпадении автора")
     void deleteById_ShouldThrowAccessDenied() {
         Publication pub = new Publication(1L, "text", LocalDateTime.now(), 42L, List.of());
+
+        log.info("Тест удаления публикации с неправильным автором, публикация id={}, авторId={}", pub.getId(), pub.getAuthorId());
         when(publicationRepository.findById(1L)).thenReturn(Optional.of(pub));
 
-        assertThrows(AccessDeniedException.class, () -> publicationService.deleteById(1L, 99L));
+        AccessDeniedException thrown = assertThrows(AccessDeniedException.class,
+                () -> publicationService.deleteById(1L, 99L));
+
+        log.info("Исключение AccessDeniedException поймано: {}", thrown.getMessage());
     }
 
     @Test
     @DisplayName("deleteById: должен выбросить EntityNotFoundException при отсутствии публикации")
     void deleteById_ShouldThrowEntityNotFound() {
+        log.info("Тест удаления публикации, которой не существует (id=1)");
         when(publicationRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class, () -> publicationService.deleteById(1L, 42L));
+        EntityNotFoundException thrown = assertThrows(EntityNotFoundException.class,
+                () -> publicationService.deleteById(1L, 42L));
+
+        log.info("Исключение EntityNotFoundException поймано: {}", thrown.getMessage());
     }
 }
