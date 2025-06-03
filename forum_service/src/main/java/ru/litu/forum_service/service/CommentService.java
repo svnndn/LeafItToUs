@@ -5,11 +5,13 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.litu.forum_service.dto.comment.RequestCommentDto;
 import ru.litu.forum_service.dto.comment.ResponseCommentDto;
+import ru.litu.forum_service.dto.user.UserDto;
 import ru.litu.forum_service.entity.Comment;
 import ru.litu.forum_service.entity.Publication;
 import ru.litu.forum_service.mapper.CommentMapper;
 import ru.litu.forum_service.repository.CommentRepository;
 import ru.litu.forum_service.repository.PublicationRepository;
+import ru.litu.forum_service.service.rest.UserServiceClient;
 
 import java.nio.file.AccessDeniedException;
 import java.time.LocalDateTime;
@@ -23,6 +25,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PublicationRepository publicationRepository;
     private final CommentMapper commentMapper;
+    private final UserServiceClient userServiceClient;
 
     public ResponseCommentDto create(RequestCommentDto dto, Long publicationId) {
 
@@ -51,6 +54,10 @@ public class CommentService {
     }
 
     public void deleteById(Long id, Long requesterId) throws AccessDeniedException {
+
+        UserDto author = userServiceClient.getUserById(requesterId);
+        System.out.println("Deleting comment by " + author.getEmail());
+
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Comment not found"));
 

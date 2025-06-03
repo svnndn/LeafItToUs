@@ -5,9 +5,11 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.litu.forum_service.dto.publication.RequestPublicationDto;
 import ru.litu.forum_service.dto.publication.ResponsePublicationDto;
+import ru.litu.forum_service.dto.user.UserDto;
 import ru.litu.forum_service.entity.Publication;
 import ru.litu.forum_service.mapper.PublicationMapper;
 import ru.litu.forum_service.repository.PublicationRepository;
+import ru.litu.forum_service.service.rest.UserServiceClient;
 
 import java.nio.file.AccessDeniedException;
 import java.time.Duration;
@@ -21,18 +23,13 @@ public class PublicationService {
 
     private final PublicationRepository publicationRepository;
     private final PublicationMapper publicationMapper;
+    private final UserServiceClient userServiceClient;
 
     public ResponsePublicationDto create(RequestPublicationDto dto) {
-        // d
-        System.out.println(dto);
-
         Publication entity = publicationMapper.toEntity(dto);
-
-        System.out.println(entity);
-
         entity.setCreatedOn(LocalDateTime.now());
-
         Publication saved = publicationRepository.save(entity);
+
         return publicationMapper.toDto(saved);
     }
 
@@ -53,8 +50,10 @@ public class PublicationService {
         );
     }
 
-
     public void deleteById(Long id, Long requesterId) throws AccessDeniedException {
+
+        UserDto author = userServiceClient.getUserById(requesterId);
+        System.out.println("Deleting publication by " + author.getEmail());
         Publication pub = publicationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Publication not found"));
 

@@ -31,10 +31,11 @@ public class WebSecurityConfig {
                 .authenticationProvider(authenticationProvider)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/admin/").hasRole("ADMIN")
-                        .requestMatchers("/", "/sign-up", "/sign-in", "/css/**", "/js/**", "/images/**").permitAll()
+                        .requestMatchers("/", "/sign-up", "/sign-in", "/css/**", "/js/**", "/images/**")
+                        .permitAll()
                         .requestMatchers(HttpMethod.POST, "/sign-up", "/login").permitAll()
-                        .requestMatchers("/users/**").authenticated()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/users/**").permitAll()
+                        .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
                         .loginPage("/sign-in")

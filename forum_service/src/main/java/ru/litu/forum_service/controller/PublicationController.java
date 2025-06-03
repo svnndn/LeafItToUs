@@ -6,7 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.litu.forum_service.dto.publication.RequestPublicationDto;
 import ru.litu.forum_service.dto.publication.ResponsePublicationDto;
+import ru.litu.forum_service.dto.user.UserDto;
 import ru.litu.forum_service.service.PublicationService;
+import ru.litu.forum_service.service.rest.UserServiceClient;
 
 import java.nio.file.AccessDeniedException;
 import java.time.Duration;
@@ -18,9 +20,13 @@ import java.util.List;
 public class PublicationController {
 
     private final PublicationService publicationService;
+    private final UserServiceClient userServiceClient;
 
     @PostMapping
     public ResponseEntity<ResponsePublicationDto> create(@RequestBody RequestPublicationDto dto) {
+        UserDto author = userServiceClient.getUserById(dto.getAuthorId());
+        System.out.println("Publication creating by " + author.getEmail());
+
         return ResponseEntity.status(HttpStatus.CREATED).body(publicationService.create(dto));
     }
 

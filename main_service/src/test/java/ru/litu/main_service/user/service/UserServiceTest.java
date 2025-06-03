@@ -19,6 +19,7 @@ import ru.litu.main_service.user.model.User;
 import ru.litu.main_service.user.repository.RoleRepository;
 import ru.litu.main_service.user.repository.UserRepository;
 
+import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
