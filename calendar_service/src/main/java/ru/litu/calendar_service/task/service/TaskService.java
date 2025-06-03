@@ -20,6 +20,12 @@ public class TaskService {
     private TaskRepository taskRepository;
 
     public void save(Task task) {
+        if (task == null) {
+            throw new IllegalArgumentException("Task cannot be null");
+        }
+        if (task.getName() == null || task.getName().trim().isEmpty()) {
+            throw new IllegalArgumentException("Task name cannot be empty");
+        }
         taskRepository.save(task);
     }
 
@@ -29,7 +35,8 @@ public class TaskService {
     }
 
     public Task getTask(long id) {
-        return taskRepository.findById(id).get();
+        return taskRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Task not found with id: " + id));
     }
 
     public void deleteTask(long id) {

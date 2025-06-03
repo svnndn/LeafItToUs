@@ -4,10 +4,12 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +22,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequestMapping()
 @RequiredArgsConstructor
@@ -29,23 +32,28 @@ public class TaskController {
 
     @GetMapping("/calendar/{date}/{userId}")
     public ResponseEntity<Object> displayTasksByClick(@PathVariable("date") int date, @PathVariable("userId") int userId) {
+        String strDay = Integer.valueOf(date).toString().substring(6, 8);
+        String strMonth = Integer.valueOf(date).toString().substring(4, 7);
+        String strYear = Integer.valueOf(date).toString().substring(0, 4);
+
         LocalDateTime startTime = processDate(
-                Integer.valueOf(date).toString(), "00:00"
+                strDay + " " + strMonth + " " + strYear, "00:00"
         );
         LocalDateTime endTime = processDate(
-                Integer.valueOf(date).toString(), "23:59"
+                strDay + " " + strMonth + " " + strYear, "23:59"
         );
         List<Task> taskList = taskService.findByDateAndUserId(userId, startTime, endTime);
 
-        // AJAX cannot recognise boolean, but isComplete is needed to set task background
-        // so below is to create a list of int. 1 for complete, 0 for incomplete
+        // 1 for complete, 0 for incomplete
         ArrayList<Integer> isCompleteList = new ArrayList<>();
         for (Task t : taskList) {
             if (t.isComplete()) {
                 isCompleteList.add(1);
             } else
                 isCompleteList.add(0);
+            log.info("display task with id: {}, name: {}", t.getId(), t.getName());
         }
+
         ServiceResponseDto<List<Task>> list = new ServiceResponseDto<>("success", taskList, isCompleteList);
         return new ResponseEntity<Object>(list, HttpStatus.OK);
     }
@@ -53,6 +61,7 @@ public class TaskController {
     @GetMapping("/calendar/displayDetail/{taskId}")
     public ResponseEntity<Object> displayDetail(@PathVariable("taskId") long id) {
         Task task = taskService.getTask(id);
+        log.info("display detail task with id: {}", id);
         ServiceResponseDto<Task> t = new ServiceResponseDto<>("success", task, null);
         return new ResponseEntity<Object>(t, HttpStatus.OK);
     }
@@ -66,6 +75,9 @@ public class TaskController {
         System.out.println(name + description + type);
 
         String hour = req.getParameter("hours");
+        if(hour.isEmpty()) {
+
+        }
         String minute = req.getParameter("minutes");
 
         String dateWithSpace = req.getParameter("date");
@@ -90,6 +102,12 @@ public class TaskController {
             }
         }
 
+//        if (result.hasErrors()) {
+//            log.error(result.getAllErrors().toString());
+//            return "error-page";
+//        }
+        log.info("save task with id: {}, name: {}", id, name);
+
         return "redirect:/calendar/" + id;
         // hides form popup, and goes back to calendar main page
     }
@@ -97,17 +115,19 @@ public class TaskController {
     @RequestMapping("/calendar/delete/{taskId}/{userId}")
     public String deleteTask(@PathVariable("taskId") long taskId, @PathVariable("userId") long userId) {
         taskService.deleteTask(taskId);
+        log.info("user with id: {} delete task with id: {}", userId, taskId);
         return "redirect:/calendar/" + userId;
     }
 
     @RequestMapping("/calendar/complete/{taskId}/{isComplete}/{userId}")
     public String completeTask(@PathVariable("taskId") long taskId, @PathVariable("isComplete") boolean isComplete, @PathVariable("userId") boolean userId) {
         taskService.updateIsComplete(taskId, !isComplete);
+        log.info("user with id: {} complete task with id: {}", userId, taskId);
         return "redirect:/calendar/" + userId;
     }
 
     @PostMapping("/calendar/edit/{taskId}/{userId}")
-    public String editTask(@PathVariable("taskId") long taskId, @PathVariable("userId") long userId, HttpServletRequest req) {
+    public String editTask(@PathVariable("taskId") long taskId, @PathVariable("userId") long userId, BindingResult result, HttpServletRequest req) {
         String newName = req.getParameter("name");
         String description = req.getParameter("description");
 
@@ -116,6 +136,12 @@ public class TaskController {
         task.setDescription(description);
 
         taskService.save(task);
+
+        if (result.hasErrors()) {
+            return "error-page";
+        }
+
+        log.info("user with id: {} edit task with id: {}", userId, taskId);
 
         return "redirect:/calendar/" + userId;
     }
@@ -127,6 +153,7 @@ public class TaskController {
         ArrayList<Integer> isCompleteList = new ArrayList<>();
         for (Task t : taskList) {
             isCompleteList.add(t.isComplete() ? 1 : 0);
+            log.info("get actual task with id: {}, name: {}", t.getId(), t.getName());
         }
 
         return ResponseEntity.ok(
