@@ -11,7 +11,7 @@ services:
     volumes:
       - ./postgresql/1:/var/lib/postgresql/data
     ports:
-      - 5436:5432
+      - 5432:5432
     networks:
       - localnet
 

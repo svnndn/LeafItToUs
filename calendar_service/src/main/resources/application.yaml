@@ -7,8 +7,8 @@ spring:
     suffix: .html
 
   datasource:
-    url: jdbc:postgresql://localhost:5434/postgres-calendar
-#    url: ${DATASOURCE_URL}
+    #url: jdbc:postgresql://localhost:5434/postgres-calendar
+    url: ${DATASOURCE_URL}
     username: postgres
     password: password
     hikari:
