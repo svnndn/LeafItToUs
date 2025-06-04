@@ -1,6 +1,6 @@
 spring:
   application:
-    name: main_service
+    name: forum_service
 
   datasource:
     #url: jdbc:postgresql://localhost:5432/postgres

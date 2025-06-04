@@ -154,7 +154,6 @@ public class TaskController {
     }
 
     private LocalDateTime processDate(String inputDate, String time) {
-        // input is in format of 2 3 2022: for 2nd March 2022
         String[] splitted = inputDate.split(" ");
         String dayStr = splitted[0].length() == 1 ? "0"+splitted[0] : splitted[0];
         String monthStr = splitted[1].length() == 1 ? "0"+splitted[1] : splitted[1];

@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 //import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.litu.main_service.exception.ObjectNotFoundException;
 import ru.litu.main_service.exception.SQLConstraintViolationException;
@@ -56,6 +57,7 @@ public class UserServiceImpl implements UserService {
         });
 
         user.setRoles(Collections.singleton(role));
+        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 
         try {
             return userRepository.save(user);
@@ -120,7 +122,7 @@ public class UserServiceImpl implements UserService {
         user.setName(newUser.getName());
         user.setUsername(newUser.getUsername());
         user.setRoles(Collections.singleton(role));
-        user.setPassword(newUser.getPassword());
+        user.setPassword(new BCryptPasswordEncoder().encode(newUser.getPassword()));
 
         user = userRepository.save(user);
 

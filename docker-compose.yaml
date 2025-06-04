@@ -11,7 +11,7 @@ services:
     volumes:
       - ./postgresql/1:/var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - 5436:5432
     networks:
       - localnet
 
@@ -83,6 +83,7 @@ services:
     ports:
       - 8082:8082
     environment:
+      - CALENDAR_URL=http://calendar-service:8083/actual
       - DATASOURCE_URL=jdbc:postgresql://postgres-notification:5432/postgres-notification
       - DATASOURCE_USERNAME=postgres
       - DATASOURCE_PASSWORD=password

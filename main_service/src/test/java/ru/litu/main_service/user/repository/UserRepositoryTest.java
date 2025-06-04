@@ -1,5 +1,6 @@
 package ru.litu.main_service.user.repository;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,18 +31,25 @@ class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
+    @BeforeEach
+    void setUp() {
+        userRepository.deleteAll();
+    }
+
     @Test
     @DisplayName("findByEmail: должен вернуть пользователя по email")
     void findByEmail_ShouldReturnUser() {
         log.info("Запуск теста findByEmail_ShouldReturnUser");
         User user = new User();
-        user.setEmail("test@mail.com");
-        user.setUsername("testuser");
-        user.setName("Test");
-        user.setPassword("password");
+        if (userRepository.findByEmail("test@mail.com").isEmpty()) {
+            user.setEmail("test@mail.com");
+            user.setUsername("testuser");
+            user.setName("Test");
+            user.setPassword("password");
 
-        log.info("Создание пользователя: {}", user);
-        userRepository.save(user);
+            log.info("Создание пользователя: {}", user);
+            userRepository.save(user);
+        }
 
         log.info("Поиск пользователя по email: {}", user.getEmail());
         Optional<User> result = userRepository.findByEmail("test@mail.com");

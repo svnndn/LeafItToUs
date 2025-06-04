@@ -13,7 +13,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByUserIdAndDateBetween(long userId, LocalDateTime startDate, LocalDateTime endDate);
     void deleteTasksByName(String name);
     List<Task> findTasksByName(String name);
-    @Query(value = "SELECT * FROM task WHERE date > NOW() ORDER BY date ASC",
+    @Query(value = "SELECT * FROM task WHERE date > current_timestamp at time zone 'MSK' ORDER BY date ASC",
             nativeQuery = true)
     List<Task> findActualTasks();
 }
