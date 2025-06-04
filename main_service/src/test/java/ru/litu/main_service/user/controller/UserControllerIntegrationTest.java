@@ -90,15 +90,22 @@ class UserControllerIntegrationTest {
     void getUserWithRealJwt() throws Exception {
         log.info("Запуск теста: получение пользователя с JWT");
         String token = obtainJwtToken();
+        NewUserDto newUser1 = new NewUserDto();
+        if (userRepository.findByUsername("testuser1").isEmpty()) {
+            newUser1 = new NewUserDto("Testuser1", "testuser1", "test1@mail.com", "password", "password");
+        }
+        User result = userService.add(newUser1);
+        Long userId = result.getId();
 
-        mockMvc.perform(get("/users/1")
+        mockMvc.perform(get("/users/" + userId)
                         .header("Authorization", token))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Test"))
-                .andExpect(jsonPath("$.email").value("test@mail.com"));
+                .andExpect(jsonPath("$.name").value("Testuser1"))
+                .andExpect(jsonPath("$.email").value("test1@mail.com"));
 
         log.info("Тест успешно пройден: получение пользователя с JWT");
     }
+
 
     @Test
     @DisplayName("POST /users с JWT — создание нового пользователя")

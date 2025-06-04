@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import ru.litu.main_service.exception.UserAuthException;
 
@@ -17,7 +18,7 @@ public class AuthenticationProvider implements org.springframework.security.auth
     UserDetails isUserValid(String username, String password) {
         UserDetails user = userService.loadUserByUsername(username);
         if (username.equalsIgnoreCase(user.getUsername())
-                && password.equals(user.getPassword())) {
+                && (new BCryptPasswordEncoder().matches(password, user.getPassword()))) {
             UserDetails userDetails = User
                     .withUsername(username)
                     .password("NOT_DISCLOSED")

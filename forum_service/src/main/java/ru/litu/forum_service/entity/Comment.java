@@ -31,7 +31,7 @@ public class Comment {
     @Column(name = "author_id")
     private Long authorId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "publication_id")
     private Publication publication;
 }
