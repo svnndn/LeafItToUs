@@ -129,7 +129,42 @@
 
     function test(string) {alert("fuck off");}
 
-    GET: $(document).ready(ajaxTaskEventListener());
+    $(document).ready(function () {
+        ajaxTaskEventListener();
+        var button = document.getElementById('displayTasksBtn');
+        button.addEventListener('click', function() {
+            $.ajax({
+                type : "GET",
+                url : "/calendar/" + date + "/" + userId,
+                success : function(result) {
+                    if (result.status == "success") {
+
+                        $('#displayModal').empty();
+                        var taskFor = document.createElement("h2");
+                        taskFor.innerText = "Task for " + date;
+                        taskFor.setAttribute("style", "font-size: 25px");
+                        document.getElementById("displayModal").append(taskFor);
+
+                        $.each(result.data, function(i, task) {
+                            constructDisplayModalLists(i, task, result);
+                        });
+                        console.log("Success: ", result);
+                    }
+                    else {
+                        $("#displayModal").html("<strong>Error</strong>");
+                        console.log("Fail: ", result);
+                    }
+                },
+
+                error : function(e) {
+                    $("#displayModal").html("<strong>Error</strong>");
+                    console.log("ERROR: ", e);
+                }
+            });
+        });
+    });
+
+    $(document).on('click', '.displayTasksBtn', function(event) {ajaxTaskEventListener()});
 
     document.getElementById("backButton").addEventListener("click", function(){
         $(document).ready(ajaxTaskEventListener());
@@ -181,21 +216,20 @@
 
     function ajaxTaskEventListener() {
         // GET REQUEST
-        $(".displayTasksBtn").each(function(){
-            this.addEventListener("click", function(event) {
-                event.preventDefault();
-                var date = this.name;
-                ajaxGetTask(date);
-            });
+        $(document).on('click', '.displayTasksBtn', function (event) {
+            event.preventDefault();
+            var date = $(this).attr('name');
+            console.log("Button clicked, date:", date, "userId:", userId);
+            ajaxGetTask(date);
         });
 
 
         // DO GET
         function ajaxGetTask(date) {
             $.ajax({
-                type : "GET",
-                url : "/calendar/" + date + "/" + userId,
-                success : function(result) {
+                type: "GET",
+                url: "/calendar/" + date + "/" + userId,
+                success: function (result) {
                     if (result.status == "success") {
 
                         $('#displayModal').empty();
@@ -204,18 +238,17 @@
                         taskFor.setAttribute("style", "font-size: 25px");
                         document.getElementById("displayModal").append(taskFor);
 
-                        $.each(result.data, function(i, task) {
+                        $.each(result.data, function (i, task) {
                             constructDisplayModalLists(i, task, result);
                         });
                         console.log("Success: ", result);
-                    }
-                    else {
+                    } else {
                         $("#displayModal").html("<strong>Error</strong>");
                         console.log("Fail: ", result);
                     }
                 },
 
-                error : function(e) {
+                error: function (e) {
                     $("#displayModal").html("<strong>Error</strong>");
                     console.log("ERROR: ", e);
                 }
@@ -251,7 +284,7 @@
 
             var deleteAnchor = document.createElement("a");
             deleteAnchor.setAttribute("class", "task-edit-anchor");
-            deleteAnchor.setAttribute("href", "/calendar/delete/"+task.id+"/"+userId);
+            deleteAnchor.setAttribute("href", "/calendar/delete/" + task.id + "/" + userId);
             deleteAnchor.innerHTML = "Delete";
             taskEditDiv.appendChild(deleteAnchor);
 
@@ -263,7 +296,7 @@
 
             var completeAnchor = document.createElement("a");
             completeAnchor.setAttribute("class", "task-edit-anchor");
-            completeAnchor.setAttribute("href", "/calendar/complete/"+task.id+"/"+isComplete+"/"+userId);
+            completeAnchor.setAttribute("href", "/calendar/complete/" + task.id + "/" + isComplete + "/" + userId);
             completeAnchor.innerHTML = "Complete";
             taskEditDiv.appendChild(completeAnchor);
 
@@ -273,7 +306,7 @@
             // detailButton.setAttribute("onclick", test("lol"));
             detailButton.setAttribute("class", "detail-button");
             detailButton.setAttribute("style", "color: black");
-            detailButton.addEventListener("click", function(event){
+            detailButton.addEventListener("click", function (event) {
                 event.preventDefault();
                 displayDetail(task.id);
             });

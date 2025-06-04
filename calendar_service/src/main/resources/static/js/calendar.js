@@ -91,7 +91,7 @@ function load(){
             var requestLink = /*[[@{}]] */"/calendar/" + currDate; // https://stackoverflow.com/questions/51786267/thymeleaf-use-a-link-with-thhref-in-javascript
 
             // displayRequestDiv.innerHTML = "<a style='text-decoration: none; color: black;' href=" + requestLink + ">see tasks</a>";
-            displayRequestDiv.innerHTML = "<button class=displayTasksBtn type=button name=" + currDate + ">see tasks</button>"
+            displayRequestDiv.innerHTML = "<button class=displayTasksBtn id='displayTasksBtn' type=button name=" + currDate + ">see tasks</button>"
 
             daySquare.appendChild(displayRequestDiv);
 

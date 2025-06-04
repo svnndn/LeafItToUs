@@ -32,6 +32,7 @@ public class TaskController {
 
     @GetMapping("/calendar/{date}/{userId}")
     public ResponseEntity<Object> displayTasksByClick(@PathVariable("date") int date, @PathVariable("userId") int userId) {
+        log.info("Received request for date: {}, userId: {}", date, userId);
         String strDay = Integer.valueOf(date).toString().substring(6, 8);
         String strMonth = Integer.valueOf(date).toString().substring(4, 7);
         String strYear = Integer.valueOf(date).toString().substring(0, 4);
@@ -101,11 +102,6 @@ public class TaskController {
                 taskService.save(task);
             }
         }
-
-//        if (result.hasErrors()) {
-//            log.error(result.getAllErrors().toString());
-//            return "error-page";
-//        }
         log.info("save task with id: {}, name: {}", id, name);
 
         return "redirect:/calendar/" + id;
@@ -120,14 +116,14 @@ public class TaskController {
     }
 
     @RequestMapping("/calendar/complete/{taskId}/{isComplete}/{userId}")
-    public String completeTask(@PathVariable("taskId") long taskId, @PathVariable("isComplete") boolean isComplete, @PathVariable("userId") boolean userId) {
+    public String completeTask(@PathVariable("taskId") long taskId, @PathVariable("isComplete") boolean isComplete, @PathVariable("userId") long userId) {
         taskService.updateIsComplete(taskId, !isComplete);
         log.info("user with id: {} complete task with id: {}", userId, taskId);
         return "redirect:/calendar/" + userId;
     }
 
     @PostMapping("/calendar/edit/{taskId}/{userId}")
-    public String editTask(@PathVariable("taskId") long taskId, @PathVariable("userId") long userId, BindingResult result, HttpServletRequest req) {
+    public String editTask(@PathVariable("taskId") long taskId, @PathVariable("userId") long userId, HttpServletRequest req) {
         String newName = req.getParameter("name");
         String description = req.getParameter("description");
 
@@ -136,10 +132,6 @@ public class TaskController {
         task.setDescription(description);
 
         taskService.save(task);
-
-        if (result.hasErrors()) {
-            return "error-page";
-        }
 
         log.info("user with id: {} edit task with id: {}", userId, taskId);
 
