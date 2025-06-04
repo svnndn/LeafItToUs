@@ -123,7 +123,6 @@
 <script type="text/javascript" th:inline="javascript">
     var userId = document.getElementById('userId').value;
     function displayDetail(taskId) {
-
         ajaxTaskDetailEventListener(taskId);
     }
 
@@ -131,38 +130,38 @@
 
     $(document).ready(function () {
         ajaxTaskEventListener();
-        var button = document.getElementById('displayTasksBtn');
-        button.addEventListener('click', function() {
-            $.ajax({
-                type : "GET",
-                url : "/calendar/" + date + "/" + userId,
-                success : function(result) {
-                    if (result.status == "success") {
-
-                        $('#displayModal').empty();
-                        var taskFor = document.createElement("h2");
-                        taskFor.innerText = "Task for " + date;
-                        taskFor.setAttribute("style", "font-size: 25px");
-                        document.getElementById("displayModal").append(taskFor);
-
-                        $.each(result.data, function(i, task) {
-                            constructDisplayModalLists(i, task, result);
-                        });
-                        console.log("Success: ", result);
-                    }
-                    else {
-                        $("#displayModal").html("<strong>Error</strong>");
-                        console.log("Fail: ", result);
-                    }
-                },
-
-                error : function(e) {
-                    $("#displayModal").html("<strong>Error</strong>");
-                    console.log("ERROR: ", e);
-                }
-            });
-        });
     });
+
+    var button = document.createElement('displayTasksBtn')
+    button.onclick = function(){
+        $.ajax({
+            type: "GET",
+            url: "/calendar/" + this.name + "/" + userId,
+            success: function (result) {
+                if (result.status == "success") {
+
+                    $('#displayModal').empty();
+                    var taskFor = document.createElement("h2");
+                    taskFor.innerText = "Task for " + this.name;
+                    taskFor.setAttribute("style", "font-size: 25px");
+                    document.getElementById("displayModal").append(taskFor);
+
+                    $.each(result.data, function (i, task) {
+                        constructDisplayModalLists(i, task, result);
+                    });
+                    console.log("Success: ", result);
+                } else {
+                    $("#displayModal").html("<strong>Error</strong>");
+                    console.log("Fail: ", result);
+                }
+            },
+
+            error: function (e) {
+                $("#displayModal").html("<strong>Error</strong>");
+                console.log("ERROR: ", e);
+            }
+        });
+    }
 
     $(document).on('click', '.displayTasksBtn', function(event) {ajaxTaskEventListener()});
 
@@ -215,7 +214,6 @@
     }
 
     function ajaxTaskEventListener() {
-        // GET REQUEST
         $(document).on('click', '.displayTasksBtn', function (event) {
             event.preventDefault();
             var date = $(this).attr('name');

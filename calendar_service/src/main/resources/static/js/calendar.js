@@ -72,13 +72,9 @@ function load(){
                     const checkBox = document.createElement("input");
                     checkBox.setAttribute("type","checkbox");
 
-
-
                     eventDiv.classList.add('event');
                     eventDiv.innerText = eventsForDay[i].title;
                     eventDiv.appendChild(checkBox);
-
-
 
                     daySquare.appendChild(eventDiv);
                 }
@@ -108,10 +104,6 @@ function load(){
                 // }
 
                 dayEvents = events.filter(e=>e.date === dayString);
-
-
-
-
 
                 // for(let i = 0; i < dayEvents.length; i++){
                 //     const eventTitle = document.createElement('div');

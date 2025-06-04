@@ -34,7 +34,7 @@ public class TaskController {
     public ResponseEntity<Object> displayTasksByClick(@PathVariable("date") int date, @PathVariable("userId") int userId) {
         log.info("Received request for date: {}, userId: {}", date, userId);
         String strDay = Integer.valueOf(date).toString().substring(6, 8);
-        String strMonth = Integer.valueOf(date).toString().substring(4, 7);
+        String strMonth = Integer.valueOf(date).toString().substring(4, 6);
         String strYear = Integer.valueOf(date).toString().substring(0, 4);
 
         LocalDateTime startTime = processDate(
