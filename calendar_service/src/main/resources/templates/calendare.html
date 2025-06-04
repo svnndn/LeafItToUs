@@ -25,6 +25,7 @@
             <a class="nav-text" href="/logout">Log out</a>
         </li>
     </ul>
+    <button id='displayActual' onclick="getActual()" type=button >see actual</button>
 </div>
 
 <!--container that contains most of the components, except for modules-->
@@ -110,7 +111,7 @@
             <option value="assessment">assessment</option>
         </select> -->
 
-        <button type="submit" name="button" style="background-color: green">Save Changes</button>
+<!--        <button type="submit" onclick="" name="button" style="background-color: green">Save Changes</button>-->
     </form>
 
     <button id="detailCloseButton" style="background-color: red">Close</button>
@@ -131,6 +132,37 @@
     $(document).ready(function () {
         ajaxTaskEventListener();
     });
+
+
+    function getActual() {
+        $.ajax({
+            type: "GET",
+            url: "/actual",
+            success: function (result) {
+                if (result.status == "success") {
+
+                    $('#displayModal').empty();
+                    var taskFor = document.createElement("h2");
+                    taskFor.innerText = "Tasks";
+                    taskFor.setAttribute("style", "font-size: 25px");
+                    document.getElementById("displayModal").append(taskFor);
+
+                    $.each(result.data, function (i, task) {
+                        constructDisplayModalLists(i, task, result);
+                    });
+                    console.log("Success: ", result);
+                } else {
+                    $("#displayModal").html("<strong>Error</strong>");
+                    console.log("Fail: ", result);
+                }
+            },
+
+            error: function (e) {
+                $("#displayModal").html("<strong>Error</strong>");
+                console.log("ERROR: ", e);
+            }
+        });
+    }
 
     var button = document.createElement('displayTasksBtn')
     button.onclick = function(){
@@ -220,6 +252,7 @@
             console.log("Button clicked, date:", date, "userId:", userId);
             ajaxGetTask(date);
         });
+    }
 
 
         // DO GET
@@ -254,6 +287,7 @@
         }
 
         function constructDisplayModalLists(i, task, result) {
+            var id = userId
             var displayModalList = document.createElement("div");
             displayModalList.setAttribute("class", "displayModalList");
 
@@ -280,11 +314,12 @@
             //     editAnchor.innerHTML = "Edit";
             // taskEditDiv.appendChild(editAnchor);
 
-            var deleteAnchor = document.createElement("a");
-            deleteAnchor.setAttribute("class", "task-edit-anchor");
-            deleteAnchor.setAttribute("href", "/calendar/delete/" + task.id + "/" + userId);
-            deleteAnchor.innerHTML = "Delete";
-            taskEditDiv.appendChild(deleteAnchor);
+            // var deleteAnchor = document.createElement("a");
+            // deleteAnchor.setAttribute("class", "task-edit-anchor");
+            // deleteAnchor.setAttribute("href", "/calendar/delete/" + task.id + "/" + id);
+            // deleteAnchor.innerHTML = "Delete";
+            // taskEditDiv.appendChild(deleteAnchor);
+
 
             if (isCompleteInt == 1) {
                 var isComplete = "true";
@@ -292,11 +327,12 @@
                 var isComplete = "false";
             }
 
-            var completeAnchor = document.createElement("a");
-            completeAnchor.setAttribute("class", "task-edit-anchor");
-            completeAnchor.setAttribute("href", "/calendar/complete/" + task.id + "/" + isComplete + "/" + userId);
-            completeAnchor.innerHTML = "Complete";
-            taskEditDiv.appendChild(completeAnchor);
+            // var completeAnchor = document.createElement("a");
+            // completeAnchor.setAttribute("class", "task-edit-anchor");
+            // completeAnchor.setAttribute("href", "/calendar/complete/" + task.id + "/" + isComplete + "/" + id);
+            // completeAnchor.innerHTML = "Complete";
+            // taskEditDiv.appendChild(completeAnchor);
+
 
             var detailButton = document.createElement("button");
             detailButton.innerHTML = "Detail";
@@ -321,7 +357,7 @@
 
             $('#displayModal').append(displayModalList);
         }
-    }
+
 
 
 
