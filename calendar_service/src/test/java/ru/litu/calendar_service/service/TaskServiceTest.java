@@ -24,6 +24,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ExtendWith(TestLoggerExtension.class)
 public class TaskServiceTest {
     private static final Logger log = LoggerFactory.getLogger(TaskServiceTest.class);

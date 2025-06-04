@@ -2,6 +2,7 @@ package ru.litu.calendar_service;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import ru.litu.calendar_service.task.TaskRepository;
 import ru.litu.calendar_service.task.service.TaskService;
 
 import static org.mockito.Mockito.mock;
@@ -12,4 +13,6 @@ public class TestConfig {
     public TaskService taskService() {
         return mock(TaskService.class);
     }
+    @Bean
+    public TaskRepository taskRepository() {return mock(TaskRepository.class);}
 }
